@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  flask-backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+    environment:
+      - FLASK_APP=api.py
+      - FLASK_ENV=development
+    command: python api.py
+    volumes:
+      - .:/api
+
+  streamlit-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      - BACKEND_URL=http://flask-backend:5000
+    command: streamlit run streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+    volumes:
+      - .:/api
+    depends_on:
+      - flask-backend
