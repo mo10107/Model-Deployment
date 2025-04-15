@@ -1,170 +1,127 @@
-# Model Deployment as API | The Iris Dataset
+# 🌸 Model Deployment as API | Iris Flower Classifier –
 
-Deploying a Machine Learning Model as a REST API with Flask
+## 📊 Data Set Information
+This dataset contains **3 classes** of **50 samples each**, where each class represents a **species of iris plant**:
 
-![Iris](https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Machine+Learning+R/iris-machinelearning.png "Iris")
+- **Setosa** 
+- **Versicolour**
+- **Virginica**
 
+**Predicted Attribute**: Iris flower class based on 4 numeric features.
 
-## Data Set Information
+## 🌿 Attribute Information
+- Sepal Length (cm)  
+- Sepal Width (cm)  
+- Petal Length (cm)  
+- Petal Width (cm)  
+- Class: `Setosa`, `Versicolour`, `Virginica`
 
-This is perhaps the best known database to be found in the pattern recognition literature. The data set contains 3 classes of 50 instances each, where each class refers to a type of iris plant. One class is linearly separable from the other 2; the latter are NOT linearly separable from each other. 
+## 🔧 Steps Overview
 
-Predicted attribute: class of iris plant. 
+1. Build & train the model in Jupyter Notebook → `model/Iris_model.ipynb`
+2. Save model as pickle file → `api/iris_model.pkl`
+3. Create a Flask API to serve predictions → `api/api.py`
+4. Create a Streamlit UI to interact with the model → `streamlit_app.py`
+5. Wrap it all in Docker using → `docker-compose.yml`
+6. Deploy locally or on the cloud
 
-## Attribute Information
+## ⚙️ Technical Requirements
 
-1. sepal length in cm 
-2. sepal width in cm 
-3. petal length in cm 
-4. petal width in cm 
-5. class: 
--- Iris Setosa 
--- Iris Versicolour 
--- Iris Virginica
+- **Python 3.9+**
+- **Docker**
+- Required Python libraries in [`requirements.txt`](requirements.txt):
 
-## Steps
-1. Build and train the machine learning model in a Jupyter Notebook (file: _model/Iris_model.ipynb_),
-2. save the model in a (pickle) file (file: _api/iris_model.pkl_)
-3. create an API application that uses the pre-trained model to generate predictions (file: _api/api.py_),
-3. encapsulate the application in a Docker container (file: _api/Dockerfile_),
-4. deploy the application to a cloud server.
-
-## Technical Requirements
-+ Python 3.4+,
-+ Docker,
-+ The required Python libraries used can be installed from the included _requirements.txt_ file:
-
-
-## Running the application locally
-### Directly
-```bash
-# Clone the project
-git clone https://github.com/AchilleasKn/flask_api_python.git
-
-# Change Directory
-cd flask_api_python/api
-
-# Install pip for Python3
-apt install python3-pip
-
-# Install the requirements
-pip3 install -r requirements.txt
-
-# Run the script in Python
-python3 api.py
+```
+flask==3.0.3
+flask-cors==5.0.1
+joblib==1.4.2
+scikit-learn==1.5.1
+numpy==1.26.4
+streamlit==1.37.1
+requests==2.32.3
 ```
 
-### On Docker
+## 🧪 Run the Application Locally
 
-###### Available images:
-- achilleaskn/flask_api_python:latest
-
-This image is based on the python:3.6-jessie official image
-
-[![](https://images.microbadger.com/badges/image/achilleaskn/flask_api_python.svg)](https://microbadger.com/images/achilleaskn/flask_api_python "Get your own image badge on microbadger.com")
-
-- achilleaskn/flask_api_python:alpine.latest
-
-This image is based on Alpine Linux image which is a lightweight version of Linux
-
-[![](https://images.microbadger.com/badges/image/achilleaskn/flask_api_python:alpine.latest.svg)](https://microbadger.com/images/achilleaskn/flask_api_python:alpine.latest "Get your own image badge on microbadger.com")
-
-##### From scratch
+### ▶️ Directly (without Docker)
 
 ```bash
-# Clone the project
-git clone https://github.com/AchilleasKn/flask_api_python.git
+# Clone the repo
+git clone https://github.com/your-username/iris_flask_streamlit.git
 
-# Change Directory
-cd flask_api_python/api
+# Navigate to backend
+cd iris_flask_streamlit/api
 
-# Build the docker image
-docker build -t flask_api .
+# Install dependencies
+pip install -r ../requirements.txt
 
-# For the alpine version run the following
-#docker build -f Dockerfile.alpine -t flask_api .
-
-# Run the flask_api image and expose the 5000 port 
-docker run -d -p 5000:5000 flask_api
-
-# To see the running containers
-docker ps 
-
-# To see the logs of our running container
-docker logs <Container ID>
+# Run Flask API
+python api.py
 ```
 
-##### With Docker Pull
+In a new terminal:
+
 ```bash
-# Pull the docker image
-docker pull achilleaskn/flask_api_python:latest
-
-# For the alpine version run the following
-#docker pull achilleaskn/flask_api_python:alpine.latest
-
-# Run the flask_api image and expose the 5000 port 
-docker run -d -p 5000:5000 achilleaskn/flask_api_python:latest
-
-# For the alpine version run the following
-#docker run -d -p 5000:5000 achilleaskn/flask_api_python:alpine.latest
-
-# To see the running containers
-docker ps 
-
-# To see the logs of our running container
-docker logs <Container ID>
+# Run Streamlit UI
+streamlit run streamlit_app.py
 ```
 
-### Testing the application
-Once it is running, the API can be queried using HTTP POST requests.
-I recommend using [postman](https://www.getpostman.com/) for testing.
+### 🐳 With Docker Compose
 
-URL: `http://0.0.0.0:5000/predict`
+```bash
+# Clone the repo
+git clone https://github.com/your-username/iris_flask_streamlit.git
 
-- Sample query for "Setosa" type:
+# Go to project folder
+cd iris_flask_streamlit/api
+
+# Build and run the containers
+docker-compose up --build
+```
+
+Access:
+- API: [http://localhost:5001/predict](http://localhost:5001/predict)
+- UI: [http://localhost:8501](http://localhost:8501)
+
+## 🧪 Testing the API
+
+You can send POST requests to the `/predict` endpoint using **Postman** or any HTTP client.
+
+### 🔍 Sample request (Setosa)
 ```json
 {
-	"feature_array":[4.9, 2.9, 1.2, 0.3]
+  "features": [4.9, 2.9, 1.2, 0.3]
+}
+```
+**Response**:
+```json
+{
+  "prediction": 0
 }
 ```
 
-The response should look like this:
+### 🌸 Versicolour
 ```json
 {
-    "prediction": [
-        0
-    ]
+  "features": [6.4, 3.2, 4.5, 1.5]
+}
+```
+**Response**:
+```json
+{
+  "prediction": 1
 }
 ```
 
-- Sample query for "Versicolour" type:
+### 🌺 Virginica
 ```json
 {
-	"feature_array":[6.4, 3.2, 4.5, 1.5]
-} 
-```
-
-The response should look like this:
-```json
-{
-    "prediction": [
-        1
-    ]
+  "features": [6.2, 3.1, 5.3, 2.4]
 }
 ```
-
-- Sample query for "Virginica" type:
+**Response**:
 ```json
 {
-	"feature_array":[6.2, 3.1, 5.3, 2.4]
-} 
-```
-
-The response should look like this:
-```json
-{
-    "prediction": [
-        2
-    ]
+  "prediction": 2
 }
 ```
