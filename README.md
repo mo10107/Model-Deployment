@@ -1,4 +1,4 @@
-# 🌸 Model Deployment as API | Iris Flower Classifier –
+# 🌸 Model Deployment as API | Iris Flower Classifier
 
 ## 📊 Data Set Information
 This dataset contains **3 classes** of **50 samples each**, where each class represents a **species of iris plant**:
